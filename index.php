@@ -1,3 +1,31 @@
+<?php
+// --- DATABASE CONNECTION (Added at the very top) ---
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "spiderverse_chronicle";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch 1960s Data for the MVP
+$decade_sql = "SELECT * FROM decades WHERE year = 1960";
+$decade_result = $conn->query($decade_sql);
+$decade_data = $decade_result->fetch_assoc();
+
+// Fetch Comics for that decade
+if ($decade_data) {
+    $comics_sql = "SELECT * FROM comics WHERE decade_id = " . $decade_data['id'];
+    $comics_result = $conn->query($comics_sql);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +44,28 @@
     </div>
 
     <div id="content-display">
-        <p>Select a decade to view the history.</p>
+<?php if ($decade_data): ?>
+            
+            <h3>The <?php echo $decade_data['year']; ?>s</h3>
+            <p><?php echo $decade_data['decade_summary']; ?></p>
+
+            <div class="character-box">
+                <strong>Key Characters:</strong> 
+                <p><?php echo $decade_data['character_summary']; ?></p>
+            </div>
+
+            <div class="comic-gallery">
+                <?php while($comic = $comics_result->fetch_assoc()): ?>
+                    <div class="comic-item">
+                        <img src="<?php echo $comic['image_filepath']; ?>" alt="<?php echo $comic['title']; ?>">
+                        <p><strong><?php echo $comic['title']; ?></strong></p>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+
+        <?php else: ?>
+            <p>Select a decade to view the history.</p>
+        <?php endif; ?>
     </div>
 </body>
 </html>
