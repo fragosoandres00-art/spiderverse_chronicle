@@ -1,12 +1,20 @@
 <?php
 // --- DATABASE CONNECTION (Added at the very top) ---
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "spiderverse_chronicle";
+$env = file_get_contents(".env");
+$lines = explode("\n",$env);
+foreach($lines as $line){
+  preg_match("/([^#]+)\=(.*)/",$line,$matches);
+  if(isset($matches[2])){ putenv(trim($line)); }
+} 
 
+$servername = getenv('SERVER_NAME');
+$username = getenv('DB_USERNAME');
+$password = getenv('DB_PASSWORD');
+$dbname = getenv('DB_NAME');
+
+/*
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli('localhost', $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
@@ -24,6 +32,8 @@ if ($decade_data) {
     $comics_result = $conn->query($comics_sql);
 }
 
+$conn->close();
+ */
 ?>
 
 <!DOCTYPE html>
