@@ -47,6 +47,7 @@ $conn->close();
     <h1>The Spider-Verse Chronicle</h1>
     <h2>Spider-Man History Museum</h2>
     
+<!--
     <div id="timeline">
         <button>1960s</button>
         <button>1970s</button>
@@ -77,5 +78,6 @@ $conn->close();
             <p>Select a decade to view the history.</p>
         <?php endif; ?>
     </div>
+-->
 </body>
 </html>
